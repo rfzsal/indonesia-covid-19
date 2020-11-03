@@ -1,0 +1,45 @@
+name: Deploy to Github pages
+
+on:
+  push:
+    branches: [master]
+  schedule:
+    - cron: '*/30 * * * *'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Use Node.js 12.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+
+      - name: Run build
+        run: |
+          rm -rf .env
+          echo "myDomain=https://rfzsal.github.io/pirus-data" >> .env
+          npm ci && npm run build
+
+      - name: Create local changes
+        run: |
+          cd public && git init
+          echo "Hello World!" >> index.html
+
+      - name: Change name and email
+        run: |
+          git config --global user.name "Faizal"
+          git config --global user.email "58117968+rfzsal@users.noreply.github.com"
+
+      - name: Commit files
+        run: |
+          cd public && git add .
+          git commit -m "GITHUB ACTIONS - Update Covid-19 data"
+
+      - name: Push changes
+        run: |
+          cd public
+          git push -f "https://${{ secrets.PERSONAL_TOKEN }}@github.com/rfzsal/pirus-data" master
