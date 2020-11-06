@@ -8,6 +8,6 @@ exports.downloadImage = async (url, imageName) => {
   });
 
   image.data
-    .pipe(fs.createWriteStream(`public/image/${imageName}`))
+    .pipe(fs.createWriteStream(`public/image/${imageName}.png`))
     .on('error', () => false);
 };
