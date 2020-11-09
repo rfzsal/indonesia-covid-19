@@ -40,3 +40,17 @@ exports.get = async () => {
 
   return news;
 };
+
+exports.parse = async (url) => {
+  const html = await axios.get(url);
+
+  const newsNode = cheerio('#konten-artikel p', html.data);
+
+  let news = [];
+
+  newsNode.each(async function () {
+    news.push(cheerio(this).text());
+  });
+
+  return news;
+};

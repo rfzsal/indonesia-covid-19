@@ -65,9 +65,12 @@ const updateNews = async () => {
 
     await downloadImage(currentNews.gambar, imageName);
 
+    const data = await News.parse(currentNews.link);
+
     fixedNews.push({
       gambar: `${myDomain}/image/${imageName}.png`,
       judul: currentNews.judul,
+      data,
       link: currentNews.link,
       tanggal: currentNews.tanggal
     });
